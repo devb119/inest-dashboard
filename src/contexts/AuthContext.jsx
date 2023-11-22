@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
         setUser(loggedInUser);
         localStorage.setItem("access-token", "password");
         setIsLoggedIn(true);
-        navigate("/");
+        navigate("/dashboard");
         return true;
       } else {
         return false;
