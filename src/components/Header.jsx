@@ -19,9 +19,9 @@ const Header = () => {
     onClick: handleMenuClick,
   };
   return (
-    <header className="h-14 border border-black flex justify-between">
+    <header className="border flex justify-between shadow-lg p-2">
       <div className="flex items-center justify-center gap-4 ml-4">
-        <img src="/logo.png" alt="logo" width={32} height={32}></img>
+        <img src="/logo.png" alt="logo" width={64} height={64}></img>
         <h1 className="font-extrabold uppercase text-xl">Inest</h1>
       </div>
       <div className="flex items-center justify-center gap-4 mr-4">

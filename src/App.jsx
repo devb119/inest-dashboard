@@ -1,13 +1,15 @@
 import "./App.css";
-import Header from "./components/Header";
-import DateChoose from "./components/DateChoose";
+import { Routes, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+
 function App() {
-  return(
-    <div className="h-screen w-screen">
-      <Header/>
-      <DateChoose/>
-    </div>
-    
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

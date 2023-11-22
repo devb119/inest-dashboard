@@ -17,8 +17,8 @@ const DateChoose = () => {
     console.log(`selected ${value}`);
   };
   return (
-    <div className="flex">
-      <div className="flex w-1/2 ml-10 mt-4">
+    <div className="flex justify-between mx-10">
+      <div className="flex w-1/2 mt-4">
         <div>
           <h1>Start Date</h1>
           <DatePicker
@@ -38,12 +38,12 @@ const DateChoose = () => {
           />
         </div>
       </div>
-      <div className="mt-4 w-1/2">
+      <div className="mt-4 w-1/2 justify-self-end">
         <h1>Filter devices</h1>
         <Select
           mode="multiple"
           allowClear
-          style={{ width: "50%" }}
+          style={{ width: "100%" }}
           placeholder="Select devices"
           onChange={handleChange}
           options={options}
