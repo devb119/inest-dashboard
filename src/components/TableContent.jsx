@@ -8,7 +8,7 @@ const TableContent = ({ data }) => {
     key: null,
     direction: "ascending",
   });
-  const recordsPerPage = 5;
+  const recordsPerPage = 25;
   const totalPages = Math.ceil(data.length / recordsPerPage);
   const maxPageNumberWindow = 5;
 
@@ -88,22 +88,22 @@ const TableContent = ({ data }) => {
             )
             .map((record, index) => (
               <tr key={index}>
-                <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   {record.TheTime}
                 </td>
-                <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   {record.NO}
                 </td>
-                <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   {record.NO2}
                 </td>
-                <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   {record.NOx}
                 </td>
-                <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   {record["O3 (ppb)"]}
                 </td>
-                <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
                   {record["CO (ppm)"]}
                 </td>
               </tr>
