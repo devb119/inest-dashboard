@@ -1,15 +1,31 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "./TableContent.css";
+import { getData } from "../api";
 
-const colNames = ["TheTime", "NO", "NO2", "NOx", "O3 (ppb)", "CO (ppm)"];
-const TableContent = ({ data }) => {
+const colNames = ["TheTime", "NO", "NO2", "NOx", "O3 (ppb)", "CO (ppm)", "Device ID"];
+const TableContent = (props) => {
+  const {startTime, endTime, deviceID} = props;
+  console.log(startTime, endTime, deviceID);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({
     key: null,
     direction: "ascending",
   });
+  const [sortedData, setSortedData] = useState([]);
+  const [configPage, setConfigPage] = useState({});
+  const [loading, setLoading] = useState(false);
   const recordsPerPage = 25;
-  const totalPages = Math.ceil(data.length / recordsPerPage);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const res = await getData(recordsPerPage, currentPage, startTime, endTime, deviceID);
+      setSortedData(res.data);
+      setConfigPage(res.meta);
+      setLoading(false);
+    }
+    fetchData();
+  }, [recordsPerPage, currentPage, startTime, endTime, deviceID]);
+  const totalPages = configPage?.total_page;
   const maxPageNumberWindow = 5;
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -23,21 +39,21 @@ const TableContent = ({ data }) => {
     pageNumbers.push(i);
   }
 
-  const sortedData = useMemo(() => {
-    let sortableData = [...data];
-    if (sortConfig.key) {
-      sortableData.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === "ascending" ? 1 : -1;
-        }
-        return 0;
-      });
-    }
-    return sortableData;
-  }, [data, sortConfig]);
+  // useEffect(() => {
+  //   let sortableData = sortedData;
+  //   if (sortConfig.key) {
+  //     sortableData.sort((a, b) => {
+  //       if (a[sortConfig.key] < b[sortConfig.key]) {
+  //         return sortConfig.direction === "ascending" ? -1 : 1;
+  //       }
+  //       if (a[sortConfig.key] > b[sortConfig.key]) {
+  //         return sortConfig.direction === "ascending" ? 1 : -1;
+  //       }
+  //       return 0;
+  //     });
+  //   }
+  //   setSortedData(sortableData);
+  // }, [sortConfig]);
 
   const requestSort = (key) => {
     let direction = "ascending";
@@ -81,38 +97,52 @@ const TableContent = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {sortedData
-            .slice(
-              (currentPage - 1) * recordsPerPage,
-              currentPage * recordsPerPage
-            )
-            .map((record, index) => (
-              <tr key={index}>
-                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {record.TheTime}
-                </td>
-                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {record.NO}
-                </td>
-                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {record.NO2}
-                </td>
-                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {record.NOx}
-                </td>
-                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {record["O3 (ppb)"]}
-                </td>
-                <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                  {record["CO (ppm)"]}
-                </td>
-              </tr>
-            ))}
+          {loading ? (
+            <tr></tr>
+          ) : 
+          <>
+            {sortedData.map((record) => (
+                <tr key={record._id}>
+                  <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    {record.TheTime}
+                  </td>
+                  <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    {record.NO.toFixed(5)}
+                  </td>
+                  <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    {record.NO2.toFixed(5)}
+                  </td>
+                  <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    {record.NOx.toFixed(5)}
+                  </td>
+                  <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    {record["O3"].toFixed(5)}
+                  </td>
+                  <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    {record["CO"].toFixed(5)}
+                  </td>                
+                  <td className="text-center px-5 py-2 border-b border-gray-200 bg-white text-sm">
+                    {record["device_id"]}
+                  </td>
+                </tr>
+              ))}
+          </>
+          }
         </tbody>
       </table>
+      {loading && (
+        <div className="py-8 font-bold justify-center text-center items-start shadow-md rounded-md">
+          Loading...
+        </div>
+      )}
+      {sortedData.length === 0 && !loading && (
+        <div className="py-8 font-bold justify-center text-center items-start shadow-md rounded-md">
+          No data found
+        </div>
+      )}
       <div className="flex justify-end my-4">
         <a
-          href="../pages/sample_data.json"
+          href={`http://222.252.4.92:27016/data/download?from_date=${startTime}&to_date=${endTime}&device_id=${deviceID}`}
           download="sample_data.json"
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex"
         >

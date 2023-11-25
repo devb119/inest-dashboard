@@ -1,40 +1,43 @@
 import { DatePicker, Select } from "antd";
 import dayjs from "dayjs";
 
-const DateChoose = () => {
-  const onChange = (value) => {
-    console.log("Selected Time: ", value);
+const DateChoose = (props) => {
+  const { setStartTime, setEndTime, setDeviceID } = props;
+  const startDate = dayjs().subtract(1, 'month');
+  const onChangeStart = (value) => {
+    const formattedStartTime = value ? dayjs(value).format("YYYY-MM-DD") : "";
+    setStartTime(formattedStartTime);
   };
-
-  const onOk = (value) => {
-    console.log("onOk: ", value);
+  const onChangeEnd = (value) => {
+    const formattedEndTime = value ? dayjs(value).format("YYYY-MM-DD") : "";
+    setEndTime(formattedEndTime);
   };
   const options = [
-    { label: "GRIMM", value: "GRIMM" },
-    { label: "HUST", value: "HUST" },
+    { label: "C10_301", value: "C10_301" },
   ];
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    setDeviceID(value);
   };
+
   return (
     <div className="flex justify-between mx-10">
       <div className="flex w-1/2 mt-4">
         <div>
           <h1>Start Date</h1>
           <DatePicker
-            defaultValue={dayjs("2023-11-20", "YYYY-MM-DD")}
+            defaultValue={startDate}
             showTime={{ format: "HH:mm" }}
-            onChange={onChange}
-            onOk={onOk}
+            onChange={onChangeStart}
+            onOk={onChangeStart}
           />
         </div>
         <div className="ml-4">
           <h1>End Date</h1>
           <DatePicker
-            defaultValue={dayjs("2023-11-20", "YYYY-MM-DD")}
+            defaultValue={dayjs()}
             showTime={{ format: "HH:mm" }}
-            onChange={onChange}
-            onOk={onOk}
+            onChange={onChangeEnd}
+            onOk={onChangeEnd}
           />
         </div>
       </div>
@@ -52,4 +55,5 @@ const DateChoose = () => {
     </div>
   );
 };
+
 export default DateChoose;
