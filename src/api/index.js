@@ -22,3 +22,8 @@ export async function getData(per_page, page, from_date, to_date, device_id) {
     const res = await axiosInstance.get(`?per_page=${per_page}&page=${page}&from_date=${from_date}&to_date=${to_date}&device_id=${device_id}`)
     return res.data
 }
+
+export async function getListDevices() {
+    const res = await axiosInstance.get(`/list-devices`)
+    return res.data
+}
