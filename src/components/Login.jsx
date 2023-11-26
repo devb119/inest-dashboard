@@ -5,7 +5,6 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const authInfo = useAuth();
-  console.log(authInfo)
   const { login } = authInfo ? authInfo : { login: () => {} };
   const handleSubmit = (e) => {
     e.preventDefault();
