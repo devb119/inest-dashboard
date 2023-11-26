@@ -7,3 +7,6 @@ body {
   font-family: "Inter", sans-serif;
   color: #333333;
 }
+.ant-btn-primary{
+  color: #000;
+}
